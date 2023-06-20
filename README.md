@@ -1,6 +1,6 @@
 # Data Visualization and Reproducible Research
 
-> Firstname Lastname. 
+> Mohammad Juma. 
 
 Learn more about me in my [GitHub profile page](https://github.com/reiminer). 
 
