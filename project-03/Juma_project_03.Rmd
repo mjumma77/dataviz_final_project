@@ -191,7 +191,7 @@ p <- ggplot(data = new_concrete,
 p + geom_histogram()
 ```
 
-Observations:
+### Observations:
 1. Data for the "Age" variable is extermely imbalanced.
 2. "Concrete_compressive_strength" distribution is almost normal shaped.
 3. I have examined other variables and they follow either category of the above  two.
@@ -201,6 +201,14 @@ Observations:
 ```{r, echo = FALSE, out.width="80%", fig.align='center'}
 knitr::include_graphics("https://github.com/reisanar/figs/raw/master/concrete_strength.png")
 ```
+
+```{r}
+new_concrete %>%
+  ggplot() +
+  geom_boxplot(aes(x = Age,
+                   y = Concrete_compressive_strength, fill = strength_range,))
+```
+
 
 
 3. Create a scatterplot similar to the one shown below. Pay special attention to which variables are being mapped to specific aesthetics of the plot. Comment on your results. 
