@@ -225,7 +225,10 @@ knitr::include_graphics("https://github.com/reisanar/figs/raw/master/cement_plot
 ```{r}
 ggplot(data = new_concrete,aes(x = Cement, y = Concrete_compressive_strength)) +
   geom_point(aes(color = Water, size = Age), alpha = 0.6) + 
-  scale_colour_viridis_c()
+  scale_colour_viridis_c() +
+  labs(title = "Exploring Strength vs (Cement, Age, and Water)",
+       y= "Strength") +
+  theme_minimal()
 ```
 
 
