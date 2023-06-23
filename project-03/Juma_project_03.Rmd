@@ -81,7 +81,7 @@ knitr::include_graphics("https://github.com/reisanar/figs/raw/master/tpa_max_tem
 ```{r}
 ggplot(tpa_clean, aes(x = max_temp)) +
   geom_density(color = "black", fill = "grey50",
-               bw = 0.5, kernel = "gaussian")
+               bw = 0.5, kernel = "epanechnikov")
 ```
 
 Hint: check the `kernel` parameter of the `geom_density()` function, and use `bw = 0.5`.
