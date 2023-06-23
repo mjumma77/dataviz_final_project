@@ -144,8 +144,34 @@ pc + geom_bar(na.rm = TRUE) + coord_flip()
 
 You can also embed plots, for example:
 
-```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 10}
+```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 12}
+       
 mpg_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,energy_type %in% c("Fossil")),
+           mapping = aes(x = engine_displacement,
+                          y = combined_mpg_ft1,
+                          color = car_type)) + 
+  geom_point(aes(size=engine_cylinders)) +
+  scale_size(guide = "none") +
+  geom_smooth(method = "loess") +
+  scale_x_binned() +
+  ylim(5,55) + 
+  facet_wrap( ~ trs_type) +
+  labs(
+    x = "Engine Size in Liters",
+    y = "Combined Miles per Gallons",
+    title = "Miles per Gallon per Number of Cylinders",
+    subtitle = "Color and Size: Car Type and Engine Displacemenmt",
+    caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
+                  at the (EPA) National Vehicle and Fuel Emissions Laboratory."
+  ) + 
+  guides(color=guide_legend(title="Type of Car"))+ 
+  theme_bw()
+print_mpg <- suppressWarnings(print(mpg_p))
+```
+
+
+```{r}
+mpg_p <-ggplot(data = fuel_car_type[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,energy_type %in% c("Fossil")),
            mapping = aes(x = engine_displacement,
                           y = combined_mpg_ft1,
                           color = car_type)) + 
@@ -167,6 +193,7 @@ mpg_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,e
   coord_flip()
 print_mpg <- suppressWarnings(print(mpg_p))
 ```
+
 
 
 ```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 9}
