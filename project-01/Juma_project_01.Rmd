@@ -157,13 +157,14 @@ mpg_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,e
   facet_wrap( ~ trs_type) +
   labs(
     x = "Engine Size in Liters",
-    y = "Cobined Miles per Gallons",
+    y = "Combined Miles per Gallons",
     title = "Miles per Gallon per Number of Cylinders",
     subtitle = "Color and Size: Car Type and Engine Displacemenmt",
     caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
                   at the (EPA) National Vehicle and Fuel Emissions Laboratory."
   ) + 
-  guides(color=guide_legend(title="Type of Car"))
+  guides(color=guide_legend(title="Type of Car")) +
+  coord_flip()
 print_mpg <- suppressWarnings(print(mpg_p))
 ```
 
