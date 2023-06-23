@@ -144,7 +144,7 @@ pc + geom_bar(na.rm = TRUE) + coord_flip()
 
 You can also embed plots, for example:
 
-```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 12}
+```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 10, fig.height=8}
        
 mpg_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,energy_type %in% c("Fossil")),
            mapping = aes(x = engine_displacement,
@@ -155,7 +155,7 @@ mpg_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,e
   geom_smooth(method = "loess") +
   scale_x_binned() +
   ylim(5,55) + 
-  facet_wrap( ~ trs_type) +
+  facet_wrap( ~ trs_type, ncol = 1) +
   labs(
     x = "Engine Size in Liters",
     y = "Combined Miles per Gallons",
