@@ -11,14 +11,23 @@ output:
 
 
 In this exercise you will explore methods to create different types of data visualizations (such as plotting text data, or exploring the distributions of continuous variables).
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggridges)
+```
 
 
 ## PART 1: Density Plots
 
 Using the dataset obtained from FSU's [Florida Climate Center](https://climatecenter.fsu.edu/climate-data-access-tools/downloadable-data), for a station at Tampa International Airport (TPA) for 2022, attempt to recreate the charts shown below which were generated using data from 2016. You can read the 2022 dataset using the code below: 
 
+
+
+
+
 ```{r, message=FALSE, warning=FALSE}
-library(tidyverse)
+
 weather_tpa <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/tpa_weather_2022.csv")
 # random sample 
 sample_n(weather_tpa, 4)
