@@ -207,7 +207,10 @@ new_concrete %>%
   drop_na() %>%
   ggplot() +
   geom_boxplot(aes(x = factor(Age),
-                   y = Concrete_compressive_strength, fill = strength_range,))
+                   y = Concrete_compressive_strength, fill = strength_range,)) +
+  theme_minimal() + 
+  labs(x = "Age (in days)",
+       y= "Compressive Strength (in MPa)")
 ```
 
 
