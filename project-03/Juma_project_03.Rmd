@@ -222,5 +222,11 @@ knitr::include_graphics("https://github.com/reisanar/figs/raw/master/cement_plot
 ```
 
 
+```{r}
+ggplot(data = new_concrete,aes(x = Cement, y = Concrete_compressive_strength)) +
+  geom_point(aes(color = Water, size = Age))
+```
+
+
 
 
