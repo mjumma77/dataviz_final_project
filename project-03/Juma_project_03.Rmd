@@ -133,7 +133,8 @@ above chartswe can see that January is the coldest and August is the hottest.
 tpa_clean %>% 
   filter (month.name %in% c("August", "January")) %>%
   ggplot(aes(y = precipitation, x = doy)) +
-  geom_point(aes(color = ave_temp), alpha = 0.8, size = 3)
+  geom_point(aes(color = ave_temp), alpha = 0.8, size = 3) +
+  facet_wrap(vars(month.name))
 ```
 
 
