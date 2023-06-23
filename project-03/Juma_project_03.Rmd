@@ -206,7 +206,7 @@ knitr::include_graphics("https://github.com/reisanar/figs/raw/master/concrete_st
 new_concrete %>%
   drop_na() %>%
   ggplot() +
-  geom_boxplot(aes(x = Age,
+  geom_boxplot(aes(x = factor(Age),
                    y = Concrete_compressive_strength, fill = strength_range,))
 ```
 
