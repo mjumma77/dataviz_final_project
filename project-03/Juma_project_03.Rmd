@@ -35,6 +35,22 @@ sample_n(weather_tpa, 4)
 
 See https://www.reisanar.com/slides/relationships-models#10 for a reminder on how to use this type of dataset with the `lubridate` package for dates and times (example included in the slides uses data from 2016).
 
+### Data Preparation using Lubridate Package
+
+```{r}
+tpa_clean <- weather_tpa %>%
+  unite("doy", year, month, day, sep = "-") %>%
+  mutate(
+    doy = ymd(doy),
+    month.name = month(doy,label = TRUE,abbr = FALSE),
+    max_temp = as.double(max_temp),
+    min_temp = as.double(min_temp),
+    precipitation = as.double(precipitation
+    ))
+tpa_clean
+```
+
+
 Using the 2022 data: 
 
 (a) Create a plot like the one below:
@@ -42,6 +58,11 @@ Using the 2022 data:
 ```{r, echo = FALSE, out.width="80%", fig.align='center'}
 knitr::include_graphics("https://github.com/reisanar/figs/raw/master/tpa_max_temps_facet.png")
 ```
+
+```{r}
+
+```
+
 
 Hint: the option `binwidth = 3` was used with the `geom_histogram()` function.
 
