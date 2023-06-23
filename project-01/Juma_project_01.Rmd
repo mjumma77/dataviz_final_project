@@ -10,3 +10,199 @@ output:
 # Data Visualization Project 01
 
 _revised version of mini-project 01 goes here_
+
+
+```{r setup, include=FALSE, message=FALSE, warnings=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning = FALSE)
+```
+
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(readr)
+library(stringr)
+```
+
+# Data Exploaration
+
+```{r cars}
+fuel_link <- "C:/Juma Data/Graduate Study/SU 2023 Courses/CAP 5735 Data Visualization/Projects/CAP 5735 Mini Project/Data/fuel.csv"
+fuel <- read_csv(fuel_link)
+glimpse(fuel)
+summary(fuel)
+```
+
+
+```{r fig.align="center", echo = FALSE,fig.width = 10}
+# Example of disproportionate Data. Natural gas penetration is extremely low compared to other sources
+# of fuel.
+p <- ggplot(data = fuel,
+            mapping = aes(x = fuel_type_1, fill = fuel_type_1))
+p + geom_bar() + coord_flip()
+
+
+```
+
+
+
+## Few Points regarding the "Fuel" Data set
+1. There are too many columns some of them are not used at all.
+2. Many missing values in the form of NAs or zeros in some cases.
+3. The data set combines 3 main fuel types; Gas, Electric and Hybrid
+4. FT stands for Fuel type. Fuel Type 2 is meant for vehicles that have dual cell but this is not
+   indicated in the data set and hence it will be ignored.
+5. Depending on the model of the vehicle data may not exist since 1986.
+6. Other relevant and important variables are not included; Weight, Horsepower Rating and starting MSRP of 
+   vehicle.
+7. Due to disproportionate data, some entries will be ignored such as the the use of Natural Gas. See the      bar chart above.
+8. Data prior to 2000 since life expectancy of a car is around 12 - 15 years according 
+
+
+# Data Preparation
+1. To prepare for Visualization, a subset of the data will be selected 
+2. A new column called "car_type" will be created based on the "class" column
+3. A new column will be created called "trs_type" based on transmission type
+4. A new column will be created called "energy_type" based on "c" column
+5. Outlines will be ignored.
+
+
+
+## Selecting a subset of the data beased on model year and selected columns
+```{r}
+fuel_main <- fuel  %>% 
+  select("year","make", "model","class", "drive", "transmission", "transmission_type",
+         "engine_cylinders","engine_displacement", ,"fuel_type","fuel_type_1","city_mpg_ft1",
+         "highway_mpg_ft1","combined_mpg_ft1", "save_or_spend_5_year", "range_ft1") %>%
+  filter(year > 1995)
+
+
+```
+
+
+
+## Checking the existenc of "NA" in each column
+```{r   message=FALSE, warnings=FALSE}
+fuel_na <- fuel_main %>%
+  summarise_all(funs(sum(is.na(.))))
+table(fuel_na)
+fuel_na
+```
+
+## Most Common values of class
+```{r fig.align="center", echo = FALSE,fig.width = 10}
+p1 <- ggplot(data = fuel_main,
+            mapping = aes(x=reorder(class, class, function(x)+length(x)), fill = class))
+p1 + geom_bar() + coord_flip() + guides(fill = "none")
+
+```
+
+
+
+```{r}
+fuel_sel <- fuel_main  %>%
+  mutate(car_type = case_when(class == "Compact Cars" | class == "Sport Utility Vehicle - 2WD"
+                               | class == "Small Station Wagons" ~ "Small_Family",
+                              class == "Midsize Cars" | class == "Sport Utility Vehicle - 4WD"
+                               | class == "Large Cars" ~ "Mid_Family",
+                              class == "Standard Pickup Trucks 2WD" ~ "Work",
+                              class == "Subcompact Cars" & class > 3.0 ~ "High_PRF",
+                              class == "Subcompact Cars" & class <= 3.0 ~ "Small_Family",
+                              class == "Two Seaters" & class > 3.0 ~ "High_PRF",
+                              class == "Two Seaters" & engine_displacement <= 3.0 ~ "Small_Family",
+                              class == "Minicompact Cars" & engine_displacement > 3.0 ~ "High_PRF",
+                              class == "Minicompact Cars" & engine_displacement <= 3.0 ~ "Small_Family",
+                              .default = "Other"))%>%
+  mutate(trs_type = case_when(str_detect(tolower(transmission),"auto") ~ "Automatic",
+                              str_detect(tolower(transmission),"man") ~ "Manual",
+                              str_detect(tolower(transmission),"na") ~ "Automatic")) %>%
+  mutate(energy_type = case_when(str_detect(tolower(fuel_type_1),"gas") ~ "Fossil",
+                              str_detect(tolower(fuel_type_1),"diesel") ~ "Fossil",
+                              str_detect(tolower(fuel_type_1),"electricity") ~ "Renewable"))
+
+```
+
+
+```{r}
+fuel_sel <- fuel_sel[fuel_sel$car_type != "Other", ]
+fuel_sel <- fuel_sel[complete.cases(fuel_sel$trs_type),]
+```
+
+### Data Verification after Preparation
+
+```{r}
+dim(fuel);dim(fuel_main);dim(fuel_sel)
+```
+
+
+```{r}
+pc <- ggplot(data = fuel_sel,mapping = aes(x = trs_type, fill = trs_type))
+pc + geom_bar(na.rm = TRUE) + coord_flip()
+
+```
+
+
+# Visualizations
+
+You can also embed plots, for example:
+
+```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 10}
+mpg_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,energy_type %in% c("Fossil")),
+           mapping = aes(x = engine_displacement,
+                          y = combined_mpg_ft1,
+                          color = car_type)) + 
+  geom_point(aes(size=engine_cylinders)) +
+  scale_size(guide = "none") +
+  geom_smooth(method = "loess") +
+  scale_x_binned() +
+  ylim(5,55) + 
+  facet_wrap( ~ trs_type) +
+  labs(
+    x = "Engine Size in Liters",
+    y = "Cobined Miles per Gallons",
+    title = "Miles per Gallon per Number of Cylinders",
+    subtitle = "Color and Size: Car Type and Engine Displacemenmt",
+    caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
+                  at the (EPA) National Vehicle and Fuel Emissions Laboratory."
+  )
+print_mpg <- suppressWarnings(print(mpg_p))
+```
+ +
+  scale_colour_discrete(na.translate = F) 
+
+```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 9}
+drive_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,energy_type %in% c("electricity")),
+           mapping = aes(x = round(year,0),
+                          y = range_ft1,
+                          color = car_type)) + 
+  geom_point(aes(size=drive)) +
+  scale_size_discrete(guide = "none") +
+  geom_smooth(method = "loess")+
+  labs(
+    x = "Time in Years",
+    y = "Range in Miles on Single Charge",
+    title = "Timeline of EV Vehicle Range per Car Type",
+    subtitle = "Color and Size: Car Type and Driveterain",
+    caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
+                  at the (EPA) National Vehicle and Fuel Emissions Laboratory.")
+print_drive <- suppressWarnings(print(drive_p))
+
+
+```
+
+
+```{r fig.align="center", echo = FALSE,fig.width = 12}
+
+fuel_p <- ggplot(data = fuel_sel,
+            mapping = aes(x = year, y = round(save_or_spend_5_year/1000,0), fill = car_type))
+fuel_p + geom_col() + 
+  facet_wrap( ~ energy_type, ncol = 1, scales = "free")+
+  labs(x = NULL, y = "Average Money Saved per Car Type",
+       title = "Renewable vs Fossil Fuel Expected Savings Timeline",
+       subtitle = "Colored by Car Type",
+       caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
+                  at the (EPA) National Vehicle and Fuel Emissions Laboratory.")
+```
+
+
