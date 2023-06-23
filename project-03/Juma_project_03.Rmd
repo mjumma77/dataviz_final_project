@@ -59,9 +59,15 @@ Using the 2022 data:
 knitr::include_graphics("https://github.com/reisanar/figs/raw/master/tpa_max_temps_facet.png")
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 ggplot(tpa_clean, aes(x = max_temp, fill = month.name)) +
-  geom_histogram(binwidth = 3, color = "white", boundary = 1)
+  geom_histogram(binwidth = 3, color = "white", boundary = 1) +
+  guides(fill = FALSE) +
+  facet_wrap(vars(month.name)) +
+  labs(y= "Number of Days", x = "Maximum Tempratures") +
+  theme_bw() +
+  ylim(0,20) + 
+  xlim(60,100)
 ```
 
 
