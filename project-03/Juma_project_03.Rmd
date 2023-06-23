@@ -171,6 +171,31 @@ new_concrete <- concrete %>%
 
 1. Explore the distribution of 2 of the continuous variables available in the dataset. Do ranges make sense? Comment on your findings.
 
+```{r}
+p <- ggplot(data = new_concrete,
+            mapping = aes(x = Concrete_compressive_strength))
+p + geom_histogram()
+```
+
+
+```{r}
+p <- ggplot(data = new_concrete,
+            mapping = aes(x = Cement))
+p + geom_histogram()
+```
+
+
+```{r}
+p <- ggplot(data = new_concrete,
+            mapping = aes(x = Age))
+p + geom_histogram()
+```
+
+Observations:
+1. Data for the "Age" variable is extermely imbalanced.
+2. "Concrete_compressive_strength" distribution is almost normal shaped.
+3. I have examined other variables and they follow either category of the above  two.
+
 2. Use a _temporal_ indicator such as the one available in the variable `Age` (measured in days). Generate a plot similar to the one shown below. Comment on your results.
 
 ```{r, echo = FALSE, out.width="80%", fig.align='center'}
