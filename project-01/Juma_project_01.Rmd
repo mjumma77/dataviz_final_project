@@ -28,10 +28,9 @@ library(stringr)
 # Data Exploaration
 
 ```{r cars}
-fuel_link <- "C:/Juma Data/Graduate Study/SU 2023 Courses/CAP 5735 Data Visualization/Projects/CAP 5735 Mini Project/Data/fuel.csv"
+fuel_link <- "../data/fuel.csv"
 fuel <- read_csv(fuel_link)
-glimpse(fuel)
-summary(fuel)
+glimpse(fuel);head(fuel)
 ```
 
 
@@ -41,7 +40,6 @@ summary(fuel)
 p <- ggplot(data = fuel,
             mapping = aes(x = fuel_type_1, fill = fuel_type_1))
 p + geom_bar() + coord_flip()
-
 
 ```
 
@@ -76,7 +74,6 @@ fuel_main <- fuel  %>%
          "engine_cylinders","engine_displacement", ,"fuel_type","fuel_type_1","city_mpg_ft1",
          "highway_mpg_ft1","combined_mpg_ft1", "save_or_spend_5_year", "range_ft1") %>%
   filter(year > 1995)
-
 
 ```
 
@@ -165,11 +162,11 @@ mpg_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,e
     subtitle = "Color and Size: Car Type and Engine Displacemenmt",
     caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
                   at the (EPA) National Vehicle and Fuel Emissions Laboratory."
-  )
+  ) + 
+  guides(color=guide_legend(title="Type of Car"))
 print_mpg <- suppressWarnings(print(mpg_p))
 ```
- +
-  scale_colour_discrete(na.translate = F) 
+
 
 ```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 9}
 drive_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel,energy_type %in% c("electricity")),
