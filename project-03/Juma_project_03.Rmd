@@ -96,6 +96,14 @@ knitr::include_graphics("https://github.com/reisanar/figs/raw/master/tpa_max_tem
 
 Hint: default options for `geom_density()` were used. 
 
+```{r}
+ggplot(tpa_clean, aes(x = max_temp, fill = month.name)) +
+  geom_density() +
+  guides(fill = FALSE) +
+  facet_wrap(vars(month.name)) +
+  labs(y= "Number of Days", x = "Maximum Temprature")
+```
+
 (d) Generate a plot like the chart below:
 
 
