@@ -1,29 +1,114 @@
 ---
 title: "Juma-project_02_b"
-output: html_document
-date: "2023-06-24"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
 ---
 
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(plotly)
+library(plyr)
+library(flexdashboard)
+
+# Make some noisily increasing data
+
+data_url <- "https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv"
+west_df <- read.csv(data_url)
+#summary(west_df)
+#table(west_df$REMODEL)
+#head(west_df)
+
+west_upper <- west_df %>%
+  filter(TOTAL.VALUE > 600)
+
+west_lower <- west_df %>%
+  filter(TOTAL.VALUE <= 300)
+
+west_old <- west_df %>%
+  filter(YR.BUILT < 1985) %>%
+  mutate(Re_model = ifelse(REMODEL=='Recent',1,0))
+
 ```
 
-## R Markdown
+geom_point
+=======================================================================
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Row
+-----------------------------------------------------------------------
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+### General House Value Trend
 
-```{r cars}
-summary(cars)
+```{r}
+p <- ggplot(west_df, aes(x=GROSS.AREA/10, y=TOTAL.VALUE)) +
+            geom_point(aes(color = as.factor(FULL.BATH), size = ROOMS)) +
+            geom_smooth(method="loess") +
+            scale_x_log10(labels=scales::comma) +
+            labs(title = "Roxbury Houses: General Trend of Value against Total Area") +
+            theme(plot.title = element_text(size = 8, face = "bold", colour = "dodgerblue4"))
+ggplotly(p)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+### Upper Quarter Houses
+
+```{r}
+p1 <- ggplot(data = west_upper,
+             mapping = aes(x = GROSS.AREA,
+                           y = TOTAL.VALUE)) + 
+  geom_point(aes(size = FULL.BATH),alpha = 0.4, color = "gray50") +
+  geom_point(data = subset(west_upper,
+                           LIVING.AREA > 3500 & ROOMS > 5 & FIREPLACE > 0), color = "orange3") +
+  scale_x_log10(labels=scales::comma) +
+  geom_smooth(method="loess") + 
+  labs(title = "Filtered: Rooms > 5 | Living Area > 3500 sq ft | Fireplace = Yes") +
+  theme(plot.title = element_text(size = 8, face = "bold", colour = "orange3"))
+
+ggplotly(p1)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Row
+-----------------------------------------------------------------------
+
+### Lower Quarter Houses
+
+```{r}
+p2 <- ggplot(data = west_lower,
+             mapping = aes(x = GROSS.AREA,
+                           y = TOTAL.VALUE)) + 
+  geom_point(aes(size = ROOMS),alpha = 0.15, color = "gray50") +
+  geom_point(data = subset(west_lower,
+                           FULL.BATH >= 2 & TAX < 4000 & LIVING.AREA <= 2000), color = "red4") +
+  scale_x_log10(labels=scales::comma) +
+  geom_smooth(method="loess", color = "skyblue3") +
+  labs(title = "Filtered: Bathrooms > 2 | Tax < 4000/yr | Living Area <= 2000 sq ft") +
+  theme(plot.title = element_text(size = 8, face = "bold", colour = "red4"))
+
+ggplotly(p2)
+```
+
+### Old Houses - Year Built prior to 1985
+
+```{r}
+
+p3 <- ggplot(data = west_old,
+             mapping = aes(x = GROSS.AREA,
+                           y = TOTAL.VALUE)) + 
+  geom_point(aes(size = ROOMS),alpha = 0.4, color = "gray50") +
+  geom_point(data = subset(west_old,
+                           Re_model == 1 & FULL.BATH > 2 & LIVING.AREA > 2000), color = "green3") +
+  scale_x_log10(labels=scales::comma) +
+  geom_smooth(method="loess", color = "skyblue3") + 
+  labs(title = "Filtered: Remodeled | # of Bathrooms > 2 | Living Area > 2000 sqft") +
+  theme(plot.title = element_text(size = 8, face = "bold", colour = "green3"))
+ggplotly(p3)
+
+
+
+
+
+```
