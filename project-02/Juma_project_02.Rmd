@@ -10,3 +10,222 @@ output:
 # Data Visualization Project 02
 
 _revised version of mini-project 02 goes here_
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction:
+In the project I will be working on two data sets:
+- The Florida lakes Data set for Spatial Visualization
+- The WestRoxbury data for Interactive and model based plotting
+
+Importing All required Libraries:
+```{r include=FALSE}
+library(tidyverse)
+library(gapminder)
+library(scales)
+library(dplyr)
+library(socviz)
+library(ggrepel)
+library(dichromat)
+library(RColorBrewer)
+library(ggthemes)
+library(cowplot )
+library(hrbrthemes)
+library(ggridges)
+library(maps)
+library(sf)
+library(plotly)
+library(sp)
+library(reshape2)
+library(corrplot)
+library(flexdashboard)
+```
+
+
+# Data Exploration and Summary
+
+## Florida Lakes Data Set
+
+### Reading the data
+```{r}
+
+loc_lakes <- "../data/Florida_Lakes/Florida_Lakes.shp"
+## Read the shapefile into R
+
+fl_lakes <- st_read(loc_lakes,quiet = TRUE)
+```
+
+### Data Summary - Florida Lakes:
+
+```{r warnings=FALSE}
+head(fl_lakes)
+summary(fl_lakes)
+lakes_na <- fl_lakes %>%
+  as.data.frame() %>%
+  summarise_all(funs(sum(is.na(.))))
+lakes_na
+```
+
+
+### Finding the top Counties with highest number of lakes and the average size of lakes 
+
+```{r warnings=FALSE}
+# finding the to 10 largest lakes in all Florida lakes
+top_10_lakes <- fl_lakes %>% 
+  as_data_frame() %>% 
+  arrange(desc(SHAPEAREA)) %>%
+  top_n(SHAPEAREA, n = 10)
+# create an sf object from the top ten data frame
+top_10_lakes_sf <- st_as_sf(top_10_lakes)
+```
+
+
+```{r}
+# I need to space out "East Lake Tohopekaliga" since its too close to "Lake Tohopekaliga" by assigning it
+# a different x nudge
+nudges <- top_10_lakes_sf %>%
+  mutate(my_nudge_x = ifelse(NAME=='East Lake Tohopekaliga',0.5,-0.75))
+```
+
+
+## Part I: Spatial Visualization
+
+I will plot all florida lakes highlighting the top 10 largest lakes on the map
+```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 20, fig.height=16}
+
+fl_lakes %>%
+  ggplot() +
+  coord_sf(crs = "+proj=longlat +datum=WGS84") + 
+  geom_sf(col = "salmon3",fill = "white") +
+  geom_sf(data = top_10_lakes_sf, aes(fill = log(SHAPEAREA))) +
+  scale_fill_viridis_c(option = "plasma") +
+  geom_sf_text(data = top_10_lakes_sf,
+               aes(label = NAME), fill = NA, col = "grey20",
+               size = 6,nudge_x = nudges$my_nudge_x, family = "serif") +
+  labs(title = "Top 10 Largest Lakes in Florida") +
+  theme(plot.title = element_text(size = 20, face = "bold", colour = "grey30"))
+```
+`
+
+## West Roxbury Data Set
+### Reading the data
+
+
+```{r warnings=FALSE}
+data_url <- "https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv"
+west_rox <- read.csv(data_url)
+```
+
+
+### Data Summary - WestRoxbury
+
+```{r}
+summary(west_rox)
+head(west_rox)
+west_rox$REMODEL <- as.factor(west_rox$REMODEL)
+
+```
+
+```{r}
+#checking if there are any NA values present in the data set
+rox_na <- west_rox %>%
+  summarise_all(funs(sum(is.na(.))))
+rox_na
+#No NA values exist in the data set
+```
+
+
+### Exploring the data
+
+The following two chunks of code is to explore the distributions of the columns 
+excluding the remodeling attribute since its a character
+```{r}
+west_rox_mod <- west_rox[!(colnames(west_rox) %in% "REMODEL")] # removing the REMODEL column
+west_long <- west_rox_mod %>%                         
+  pivot_longer(colnames(west_rox_mod)) %>% 
+  as.data.frame()
+
+  
+```
+
+### Attribute distrbutions
+```{r message=FALSE, warning = FALSE}
+ggp1 <- ggplot(west_long, aes(x = value)) +    # Draw each attribute
+  geom_histogram() + 
+  facet_wrap(~ name, scales = "free")
+ggp1
+```
+- disregarding the aesthetics of the graph, we can see that there seems to be a correlation between: living area (and hence Gross Area), 
+Tax and Value of the house. We will explore that below under correlation
+- Data for many distributions is not balanced.
+
+### Correlation table:
+
+```{r message=FALSE, warning = FALSE}
+corrplot(cor(west_rox_mod))
+```
+Few takeaways from the correlation graph:
+1. Strong correlation between House value, Tax, Area, Gross area, Rooms and Bedrooms.
+2. Only one attribute of any pairs (or more) of strongly correlated attributes will be selected for prediction. 
+3. Since gross area encompasses living area using one of them in the model will be enough
+4. Kitchen has almost no impact.
+5. The age of the house has a slight negative impact on the value of the house.
+
+
+### Building a model to predict the value of the house
+```{r message=FALSE, warning = FALSE}
+library(GGally)
+library(broom)
+west_house_mod <- lm(TOTAL.VALUE ~ GROSS.AREA + ROOMS + FLOORS,
+                     data = west_rox)
+hous_coefs <- tidy(west_house_mod, conf.int = TRUE) %>%
+  filter(term != "(Intercept)")
+```
+
+### Building test data for prediction
+```{r}
+hous_new <- expand.grid(GROSS.AREA = seq(800, 8000, by = 100), # area start around 800 ft to roughly 8000
+                   ROOMS = seq(1,12 , by = 1), # from the summary number of rooms between 1 & 12
+                   FLOORS = seq(1, 3, by = 1)) # max. number of floor is 3 from summary
+head(hous_new)
+```
+
+FLOORS = seq(0, 3, by = .1))
+### Using the model to make prediction
+```{r}
+pred_hous_value <- augment(west_house_mod, newdata = hous_new, se_fit = TRUE)
+head(pred_hous_value)
+```
+
+```{r}
+# The below extra data frames are created to be able to add a rectangle and text on one of the facet plots not all
+ann_rect <-  pred_hous_value[!(colnames(pred_hous_value) %in% ".se.fit")] # This for the rectangle
+
+ann_text <- data.frame(GROSS.AREA = 7000,.fitted = 475,lab = "Text", # This one for the label.
+                       FLOORS = factor(1,levels = c("1","2","3")))
+```
+
+
+## Part II: Model based Visualization
+```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 12, fig.height=8}
+ggplot(pred_hous_value,
+       aes(x = GROSS.AREA, y = .fitted)) +
+  geom_point(data = pred_hous_value, aes(col = ROOMS), alpha = 0.5) +
+  geom_smooth(method = "loess", color = "orange") +
+  facet_wrap(vars(FLOORS)) + 
+  theme_minimal() +
+  geom_rect(data = ann_rect %>%
+              filter(FLOORS == 1),
+            aes(xmin = 4000, xmax = 5200, ymin = 420, ymax = 520), alpha = .01, fill="plum", inherit.aes = FALSE)+
+  geom_text(data = ann_text,label = "Vertical variations\n due to # floors", hjust = 0.5) +
+  labs(title = "Predicted House Values as a Function of Total Area, Floors and Number of Rooms") +
+  theme(plot.title = element_text(size = 12, face = "bold", colour = "dodgerblue4"))
+  
+```
+
+
+# Part III : Interactive Visualization
+This part will be completed using a separate markdown file using FlexDashboard template.
