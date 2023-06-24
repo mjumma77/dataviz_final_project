@@ -183,7 +183,7 @@ drive_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel
            mapping = aes(x = round(year,0),
                           y = range_ft1,
                           color = car_type)) + 
-  geom_point(aes(size=drive)) +
+  geom_point(size = 3) +
   scale_size_discrete(guide = "none") +
   labs(
     x = "Time in Years",
@@ -191,7 +191,8 @@ drive_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel
     title = "Timeline of EV Vehicle Range per Car Type",
     subtitle = "Color and Size: Car Type and Driveterain",
     caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
-                  at the (EPA) National Vehicle and Fuel Emissions Laboratory.")
+                  at the (EPA) National Vehicle and Fuel Emissions Laboratory.")+
+  theme_bw()
 print_drive <- suppressWarnings(print(drive_p))
 
 
