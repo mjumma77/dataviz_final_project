@@ -185,7 +185,6 @@ drive_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel
                           color = car_type)) + 
   geom_point(aes(size=drive)) +
   scale_size_discrete(guide = "none") +
-  geom_smooth(method = "loess")+
   labs(
     x = "Time in Years",
     y = "Range in Miles on Single Charge",
