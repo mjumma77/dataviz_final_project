@@ -16,8 +16,8 @@ library(flexdashboard)
 
 # Make some noisily increasing data
 
-data_url <- "https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv"
-west_df <- read.csv(data_url)
+data_url <- "../data/WestRoxbury.csv"
+west_rox <- read.csv(data_url)
 #summary(west_df)
 #table(west_df$REMODEL)
 #head(west_df)
