@@ -24,7 +24,7 @@ The project is divided on high level two three parts:
     - A Visualization exploring the evolution of EV car range over time and the dominant car type for EV cars
     - A Visualization comparing the money saving for EV vs Fossil fuel cars
 ## Sample Visualization
-![](figures/Florida_Lakes.png)
+![](figures/Renewable_vs_Fossil.png.png)
 
 
 ## Project 02
@@ -48,7 +48,8 @@ The project is divided on high level two three parts:
           - Old Houses: a plot of the oldest houses in the set
           
 Final note: Because the last visualization is a dashboard, it will be created in a separate markdown file.
-
+## Sample Visualization:
+![](figures/Florida_Lakes.png)
 ## Project 03
 
 In this project, I explored ... _[The reproducibility of selected visualization bt Dr. Sanchez]_
@@ -59,6 +60,8 @@ Data Sets:
 Visualizations:
 Number of visualization are generated exploring the distribution of temperatures vs months and Concrete Strength against Age
 and other ingredients such as water.
+## Sample Visualization:
+![](figures/Sample_Density.png)
 
 ### Moving Forward
 
