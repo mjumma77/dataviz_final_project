@@ -49,6 +49,8 @@ The project is divided on high level two three parts:
           - High-value Houses Plot: a Plot of the top 25% pf the houses in the set
           - Lower-value Houses: a plot of the lower 25% of the houses
           - Old Houses: a plot of the oldest houses in the set
+          
+Final note: Because the last visualization is a dashboard, it will be created in a separate markdown file.
 
 **Sample data visualization:** 
 
