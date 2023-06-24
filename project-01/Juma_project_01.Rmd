@@ -201,12 +201,12 @@ print_drive <- suppressWarnings(print(drive_p))
 
 
 ```{r fig.align="center", echo = FALSE,fig.width = 12}
-
+library(RColorBrewer)
 fuel_p <- ggplot(data = fuel_sel,
             mapping = aes(x = year, y = round(save_or_spend_5_year/1000,0), fill = save_or_spend_5_year))
 fuel_p + geom_col() + 
   facet_wrap( ~ energy_type, ncol = 1, scales = "free")+
-  scale_fill_viridis_c(option = "inferno") +
+ scale_fill_viridis_c(option = "magma") +
   guides(fill = FALSE) +
   labs(x = NULL, y = "Money Spent (-) or Save (+)",
        title = "Renewable vs Fossil Fuel Expected Savings overtime",
@@ -216,5 +216,8 @@ fuel_p + geom_col() +
 ```
 
 
+```{r}
+install.packages("colorspace", repos="http://R-Forge.R-project.org")
+```
 
 
