@@ -52,7 +52,7 @@ library(flexdashboard)
 ### Reading the data
 ```{r}
 
-loc_lakes <- "../data/Florida_Lakes/Florida_Lakes.shp"
+loc_lakes <- "../data/Florida_Lakes.shp"
 ## Read the shapefile into R
 
 fl_lakes <- st_read(loc_lakes,quiet = TRUE)
@@ -98,12 +98,11 @@ I will plot all florida lakes highlighting the top 10 largest lakes on the map
 
 fl_lakes %>%
   ggplot() +
-  coord_sf(crs = "+proj=longlat +datum=WGS84") + 
   geom_sf(col = "salmon3",fill = "white") +
   geom_sf(data = top_10_lakes_sf, aes(fill = log(SHAPEAREA))) +
   scale_fill_viridis_c(option = "plasma") +
-  geom_sf_text(data = top_10_lakes_sf,
-               aes(label = NAME), fill = NA, col = "grey20",
+  geom_sf_label(data = top_10_lakes_sf,
+               aes(label = NAME), fill = "white", col = "grey20",
                size = 6,nudge_x = nudges$my_nudge_x, family = "serif") +
   labs(title = "Top 10 Largest Lakes in Florida") +
   theme(plot.title = element_text(size = 20, face = "bold", colour = "grey30"))
