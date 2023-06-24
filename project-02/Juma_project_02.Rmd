@@ -210,9 +210,9 @@ ann_text <- data.frame(GROSS.AREA = 7000,.fitted = 475,lab = "Text", # This one 
 
 ## Part II: Model based Visualization
 ```{r warnings=FALSE,  fig.align="center", echo = FALSE,fig.width = 12, fig.height=8}
-ggplot(pred_hous_value,
+ggplot(glm_pred,
        aes(x = GROSS.AREA, y = .fitted)) +
-  geom_point(data = pred_hous_value, aes(col = ROOMS), alpha = 0.5) +
+  geom_point(data = glm_pred, aes(col = ROOMS), alpha = 0.5) +
   geom_smooth(method = "loess", color = "orange") +
   facet_wrap(vars(FLOORS)) + 
   theme_minimal() +
