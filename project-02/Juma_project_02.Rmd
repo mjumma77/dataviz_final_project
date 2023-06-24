@@ -221,7 +221,9 @@ ggplot(glm_pred,
               filter(FLOORS == 1),
             aes(xmin = 4000, xmax = 5200, ymin = 420, ymax = 520), alpha = .01, fill="plum", inherit.aes = FALSE)+
   geom_text(data = ann_text,label = "Vertical variations\n due to # floors", hjust = 0.5) +
-  labs(title = "Predicted House Values as a Function of Total Area, Floors and Number of Rooms") +
+  labs(title = "Predicted House Values as a Function of Total Area, Floors and Number of Rooms",
+       y = "Predicted house value in thousands",
+       x = "House size in square feet") +
   theme(plot.title = element_text(size = 12, face = "bold", colour = "dodgerblue4"))
   
 ```
