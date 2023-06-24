@@ -23,6 +23,9 @@ The project is divided on high level two three parts:
     - A Visualization exploring the effect of Engine Displacement in liters and the car type on the mile per galon metric
     - A Visualization exploring the evolution of EV car range over time and the dominant car type for EV cars
     - A Visualization comparing the money saving for EV vs Fossil fuel cars
+## Sample Visualization
+![](..\figures\Renewable_vs_Fossil.png)
+
 
 ## Project 02
 
