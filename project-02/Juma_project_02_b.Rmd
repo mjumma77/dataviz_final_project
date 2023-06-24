@@ -44,12 +44,16 @@ Row
 
 ```{r}
 p <- ggplot(west_df, aes(x=GROSS.AREA/10, y=TOTAL.VALUE)) +
-            geom_point(aes(color = as.factor(FULL.BATH), size = ROOMS)) +
+            geom_point(aes(color = factor(FULL.BATH), size = ROOMS)) +
             geom_smooth(method="loess") +
             scale_color_viridis_d() +
             scale_x_log10(labels=scales::comma) +
-            labs(title = "Roxbury Houses: General Trend of Value against Total Area") +
-            theme(plot.title = element_text(size = 8, face = "bold", colour = "dodgerblue4"))
+            theme(plot.title = element_text(size = 8, face = "bold", colour = "dodgerblue4")) +
+            labs(title = "Roxbury Houses: General Trend of Value against Total Area",
+                  y = "House value in thousands",
+                  x = "House size in square feet") +
+            guides(color=guide_legend(title="# of Baths"), size = guide_legend(title=NULL))
+            theme_bw()
 ggplotly(p)
 ```
 
@@ -66,8 +70,11 @@ p1 <- ggplot(data = west_upper,
                            LIVING.AREA > 3500 & ROOMS > 5 & FIREPLACE > 0), color = "orange3") +
   scale_x_log10(labels=scales::comma) +
   geom_smooth(method="loess") + 
-  labs(title = "Filtered: Rooms > 5 | Living Area > 3500 sq ft | Fireplace = Yes") +
-  theme(plot.title = element_text(size = 8, face = "bold", colour = "orange3"))
+  theme(plot.title = element_text(size = 8, face = "bold", colour = "orange3")) +
+  labs(title = "Filtered: Rooms > 5 | Living Area > 3500 sq ft | Fireplace = Yes",
+                  y = "House value in thousands",
+                  x = "House size in square feet") +
+  theme_bw()
 
 ggplotly(p1)
 ```
@@ -86,7 +93,9 @@ p2 <- ggplot(data = west_lower,
                            FULL.BATH >= 2 & TAX < 4000 & LIVING.AREA <= 2000), color = "red4") +
   scale_x_log10(labels=scales::comma) +
   geom_smooth(method="loess", color = "skyblue3") +
-  labs(title = "Filtered: Bathrooms > 2 | Tax < 4000/yr | Living Area <= 2000 sq ft") +
+  labs(title = "Filtered: Bathrooms > 2 | Tax < 4000/yr | Living Area <= 2000 sq ft",
+        y = "House value in thousands",
+        x = "House size in square feet") +
   theme(plot.title = element_text(size = 8, face = "bold", colour = "red4"))
 
 ggplotly(p2)
@@ -104,7 +113,9 @@ p3 <- ggplot(data = west_old,
                            Re_model == 1 & FULL.BATH > 2 & LIVING.AREA > 2000), color = "green3") +
   scale_x_log10(labels=scales::comma) +
   geom_smooth(method="loess", color = "skyblue3") + 
-  labs(title = "Filtered: Remodeled | # of Bathrooms > 2 | Living Area > 2000 sqft") +
+  labs(title = "Filtered: Remodeled | # of Bathrooms > 2 | Living Area > 2000 sqft",
+       y = "House value in thousands",
+       x = "House size in square feet") +
   theme(plot.title = element_text(size = 8, face = "bold", colour = "green3"))
 ggplotly(p3)
 
