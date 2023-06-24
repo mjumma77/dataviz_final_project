@@ -46,6 +46,7 @@ Row
 p <- ggplot(west_df, aes(x=GROSS.AREA/10, y=TOTAL.VALUE)) +
             geom_point(aes(color = as.factor(FULL.BATH), size = ROOMS)) +
             geom_smooth(method="loess") +
+            scale_color_viridis_d() +
             scale_x_log10(labels=scales::comma) +
             labs(title = "Roxbury Houses: General Trend of Value against Total Area") +
             theme(plot.title = element_text(size = 8, face = "bold", colour = "dodgerblue4"))
