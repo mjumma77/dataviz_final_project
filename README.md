@@ -24,12 +24,6 @@ The project is divided on high level two three parts:
     - A Visualization exploring the evolution of EV car range over time and the dominant car type for EV cars
     - A Visualization comparing the money saving for EV vs Fossil fuel cars
 
-**Sample data visualization:** 
-
-_[include your favorite visualization from this project here]_
-<img src="https://github.com/reisanar/figs/raw/master/echarts.png" width="70%" height="70%">
-
-
 ## Project 02
 
 In this project, I explored ... _[Exploration of three types of visualization: Spatial, Interactive, and Model Based]_ 
@@ -52,14 +46,6 @@ The project is divided on high level two three parts:
           
 Final note: Because the last visualization is a dashboard, it will be created in a separate markdown file.
 
-**Sample data visualization:** 
-
-_[include your favorite visualization from this project here]_
-<img src="https://raw.githubusercontent.com/reisanar/dataviz_final_project/main/figures/fl_higher_ed.png" width="80%" height="80%">
-
-(you can place your figures in the `figures/` folder and use the `![](path_to_picture)` option to add the pictures here)
-
-
 ## Project 03
 
 In this project, I explored ... _[The reproducibility of selected visualization bt Dr. Sanchez]_
@@ -71,13 +57,7 @@ Visualizations:
 Number of visualization are generated exploring the distribution of temperatures vs months and Concrete Strength against Age
 and other ingredients such as water.
 
-
-**Sample data visualization:** 
-
-_[include your favorite visualization from this project here]_
-<img src="https://github.com/reisanar/figs/raw/master/concrete_density.png" width="80%" height="80%">
-
-
 ### Moving Forward
 
-_Please add here a short reflection on what you learned and what you plan to continue exploring in terms of data visualization, data storytelling, reproducible research, and/or related topics._
+This class, though demanding, has really opened my eyes to many design principles. I can't say that I have followed all but it definitely improved my visuals.
+I intend on improving my skills and fine tune my artistic sense if I ever have one :)
