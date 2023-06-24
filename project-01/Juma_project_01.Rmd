@@ -207,8 +207,9 @@ fuel_p <- ggplot(data = fuel_sel,
 fuel_p + geom_col() + 
   facet_wrap( ~ energy_type, ncol = 1, scales = "free")+
   scale_fill_viridis_c(option = "inferno") +
-  labs(x = NULL, y = "Average Money Saved per Car Type",
-       title = "Renewable vs Fossil Fuel Expected Savings Timeline",
+  guides(fill = FALSE) +
+  labs(x = NULL, y = "Money Spent (-) or Save (+)",
+       title = "Renewable vs Fossil Fuel Expected Savings overtime",
        caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
                   at the (EPA) National Vehicle and Fuel Emissions Laboratory.") +
   theme_dark()
