@@ -178,9 +178,9 @@ Few takeaways from the correlation graph:
 ```{r message=FALSE, warning = FALSE}
 library(GGally)
 library(broom)
-west_house_mod <- lm(TOTAL.VALUE ~ GROSS.AREA + ROOMS + FLOORS,
+west_glm <- glm(TOTAL.VALUE ~ GROSS.AREA + ROOMS + FLOORS,
                      data = west_rox)
-hous_coefs <- tidy(west_house_mod, conf.int = TRUE) %>%
+hous_coefs <- tidy(west_glm, conf.int = TRUE) %>%
   filter(term != "(Intercept)")
 ```
 
