@@ -195,8 +195,8 @@ head(hous_new)
 FLOORS = seq(0, 3, by = .1))
 ### Using the model to make prediction
 ```{r}
-pred_hous_value <- augment(west_house_mod, newdata = hous_new, se_fit = TRUE)
-head(pred_hous_value)
+glm_pred <- augment(west_glm, newdata = hous_new, se_fit = TRUE)
+head(glm_pred)
 ```
 
 ```{r}
