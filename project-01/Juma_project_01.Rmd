@@ -192,7 +192,8 @@ drive_p <-ggplot(data = fuel_sel[!(is.na(fuel_sel$trs_type)),], filter (fuel_sel
     subtitle = "Color and Size: Car Type and Driveterain",
     caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
                   at the (EPA) National Vehicle and Fuel Emissions Laboratory.")+
-  theme_bw()
+  theme_bw() +
+  guides(color=guide_legend(title="Type of Car")) 
 print_drive <- suppressWarnings(print(drive_p))
 
 
