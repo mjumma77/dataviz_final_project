@@ -210,7 +210,10 @@ fuel_p + geom_col() +
        title = "Renewable vs Fossil Fuel Expected Savings Timeline",
        subtitle = "Colored by Car Type",
        caption = "Data: 1984-2017 fuel economy data produced during vehicle testing
-                  at the (EPA) National Vehicle and Fuel Emissions Laboratory.")
+                  at the (EPA) National Vehicle and Fuel Emissions Laboratory.") +
+  theme_bw()
 ```
+
+
 
 
